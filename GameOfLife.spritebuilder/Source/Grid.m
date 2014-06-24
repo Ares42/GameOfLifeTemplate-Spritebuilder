@@ -11,7 +11,7 @@
 
 // these are variables that cannot be changed
 static const int GRID_ROWS = 8;
-static const int GRID_COLUMNS = 8;
+static const int GRID_COLUMNS = 10;
 
 @implementation Grid {
     NSMutableArray *_gridArray;
@@ -56,6 +56,7 @@ static const int GRID_COLUMNS = 8;
             
             // make creatures visible to test this method, remove this once we know we have filled the grid properly
             creature.isAlive = YES;
+            
             //*****DELETE THIS LATER
             
             x += _cellWidth;
