@@ -52,7 +52,7 @@ static const int GRID_COLUMNS = 8;
             [self addChild: creature];
             
             // this is shorthand to access an array inside an array
-            _gridArray[i][j] = Creature;
+            _gridArray[i][j] = creature;
             
             // make creatures visible to test this method, remove this once we know we have filled the grid properly
             creature.isAlive = YES;
