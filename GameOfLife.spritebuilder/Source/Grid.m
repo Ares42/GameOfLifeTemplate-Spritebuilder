@@ -17,9 +17,10 @@ static const int GRID_COLUMNS = 10;
     NSMutableArray *_gridArray;
     float _cellWidth;
     float _cellHeight;
+    
 }//Grid Method
 
-- (void)onEnter {
+-(void)onEnter {
     [super onEnter];
     [self setupGrid];
     
@@ -28,7 +29,7 @@ static const int GRID_COLUMNS = 10;
     
 }//onEnter Method
 
-- (void)setupGrid {
+-(void)setupGrid {
     // divide the grid's size by the number of columns/rows to figure out the right width and height of each cell
     _cellWidth = self.contentSize.width / GRID_COLUMNS;
     _cellHeight = self.contentSize.height / GRID_ROWS;
@@ -63,7 +64,7 @@ static const int GRID_COLUMNS = 10;
 
 }//SetupGrid Method
 
-- (void)touchBegan:(UITouch *)touch withEvent:(UIEvent *)event {
+-(void)touchBegan:(UITouch *)touch withEvent:(UIEvent *)event {
     //get the x,y coordinates of the touch
     CGPoint touchLocation = [touch locationInNode:self];
     
@@ -83,11 +84,106 @@ static const int GRID_COLUMNS = 10;
     
     //return the creature
     return _gridArray[row][column];
-    
-    
-    // ******* Continue from here ***********
 }
 
+-(void)evolveStep {
+    
+    //update each Creature's neighbor count
+    [self countNeighbors];
+    
+    //update each Creature's state
+    [self updateCreatures];
+    
+    //update the generation so the label's text will display the correct generation
+    _generation++;
+}
+
+-(void)countNeighbors {
+    
+    /*
+     iterate through rows
+     note that NSArray has a method 'count' that will return the number of elements in the array
+     */
+    for (int i = 0; i < [_gridArray count]; i++)
+    {
+        //iterate through all the columns for a given row
+        for (int j = 0; j<[_gridArray[i] count]; j++)
+        {
+            //access the creature in the cell that corresponds to the current row/column
+            Creature *currentCreature = _gridArray[i][j];
+            
+            //remember that every creature has a 'living neighbors' property that we created
+            currentCreature.livingNeighbors = 0;
+            
+            //now examine every cell around the current one
+            //go through the row on top of the current cell, the row the cell is in, and then
+            for (int x = (i-1); x <= (i+1); x++) {
+                // go through the column to the left of the current cell, the column the cell is in, and the column to the right of the current cell
+                for(int y = (j-1); y <=(j+1); y++) {
+                    //check that the cell we're checking isn't off the screen
+                    BOOL isIndexValid;
+                    isIndexValid = [self isIndexValidForX:x andY:y];
+                    
+                    //skip over all cells that are off screen AND the cell that contains the creature we are currently updating
+                    if (!((x == i) && (y == j)) && isIndexValid)
+                    {
+                        Creature *neighbor = _gridArray[x][y];
+                        if (neighbor.isAlive)
+                        {
+                            currentCreature.livingNeighbors += 1;
+                        }//if
+                    }//if
+                }//for
+            }//for
+        }//for
+    }//for
+}//countNeighbors
+
+-(BOOL)isIndexValidForX:(int)x andY:(int)y{
+    BOOL isIndexValid = YES;
+    if(x < 0 || y < 0 || x >= GRID_ROWS || y >= GRID_COLUMNS)
+    {
+        isIndexValid = NO;
+    }
+    return isIndexValid;
+}//--isIndexValidForXandY--
+
+-(void) updateCreatures {
+
+    //loops through rows
+    for (int i = 0; i < [_gridArray count]; i++)
+    {
+        //loops through columns
+        for (int j = 0; j < [_gridArray[i] count]; j++)
+        {
+            //create instance variable called current creature
+            Creature *currentCreature = _gridArray[i][j];
+            
+            //if creature has exactly three live neighbors...
+            if (currentCreature.livingNeighbors == 3){
+                
+                //the creature stays alive or is brought back to life
+                currentCreature.isAlive = true;
+            }
+            
+            //if the creature has 1 or fewer live neighbors...
+            else if(currentCreature.livingNeighbors <= 1)  {
+                //kill the creature
+                currentCreature.isAlive= false;
+            }
+            
+            //if the creature has 4 or more live neighbors...
+            else if(currentCreature.livingNeighbors >= 4) {
+                //kill the creature
+                currentCreature.isAlive= false;
+                
+            }//***else if
+        }//***for
+    }//***for
+    
+    _totalAlive = numAlive;
+    
+}//--updateCreatures--
 
 
 
