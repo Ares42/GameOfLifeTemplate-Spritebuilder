@@ -181,8 +181,6 @@ static const int GRID_COLUMNS = 10;
         }//***for
     }//***for
     
-    _totalAlive = numAlive;
-    
 }//--updateCreatures--
 
 
