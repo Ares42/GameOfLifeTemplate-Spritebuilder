@@ -165,10 +165,12 @@ static const int GRID_COLUMNS = 10;
                 
                 //the creature stays alive or is brought back to life
                 currentCreature.isAlive = true;
-            } else (currentCreature.livingNeighbors <= 1 || currentCreature.livingNeighbors >=4){
+            } else if (currentCreature.livingNeighbors <= 1 || currentCreature.livingNeighbors >=4){
                 
                 currentCreature.isAlive= false;
             }
+            
+            
             
             /*
             //if the creature has 1 or fewer live neighbors...
