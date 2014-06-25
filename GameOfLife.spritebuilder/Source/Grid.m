@@ -159,13 +159,18 @@ static const int GRID_COLUMNS = 10;
             //create instance variable called current creature
             Creature *currentCreature = _gridArray[i][j];
             
+            
             //if creature has exactly three live neighbors...
             if (currentCreature.livingNeighbors == 3){
                 
                 //the creature stays alive or is brought back to life
                 currentCreature.isAlive = true;
+            } else (currentCreature.livingNeighbors <= 1 || currentCreature.livingNeighbors >=4){
+                
+                currentCreature.isAlive= false;
             }
             
+            /*
             //if the creature has 1 or fewer live neighbors...
             else if(currentCreature.livingNeighbors <= 1)  {
                 //kill the creature
@@ -177,7 +182,9 @@ static const int GRID_COLUMNS = 10;
                 //kill the creature
                 currentCreature.isAlive= false;
                 
-            }//***else if
+            }
+             */
+            
         }//***for
     }//***for
     
