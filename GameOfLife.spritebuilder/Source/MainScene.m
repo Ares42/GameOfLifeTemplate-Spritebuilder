@@ -27,20 +27,24 @@
 }//init
 
 -(void)play {
+    
     //tells the game to call method "step" every half second
     [self schedule:@selector(step) interval:(0.5f)];
+    
 }//play
 
 -(void) pause {
+    
     [self unschedule:@selector(step)];
+    
 }//pause
 
-
-
 -(void) step {
+    
     [_grid evolveStep];
     _generationLabel.string = [NSString stringWithFormat:@"%d", _grid.generation];
     _populationLabel.string = [NSString stringWithFormat:@"%d", _grid.totalAlive];
+    
 }//step
 
 
